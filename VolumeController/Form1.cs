@@ -37,21 +37,21 @@ namespace VolumeController
             device = DevEnum.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
 
             // 現在の音量を取得して、初期値として設定
-            label2.Text = System.Convert.ToString(GetVolume());
+            volume_label.Text = System.Convert.ToString(GetVolume());
             volume_trackBar.Value = GetVolume();
             // デバイスの一覧を取得
-            comboBox1.Items.AddRange(GetDevices());
+            devices_cmb.Items.AddRange(GetDevices());
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (comboBox1.SelectedItem != null)
+            if (devices_cmb.SelectedItem != null)
             {
                 
-                var device = (MMDevice)comboBox1.SelectedItem;
+                var device = (MMDevice)devices_cmb.SelectedItem;
                 // progressBar1の値を変更
-                progressBar1.Value = (int)(Math.Round(device.AudioMeterInformation.MasterPeakValue * 100));
-                progres_value.Text = System.Convert.ToString(progressBar1.Value);
+                peak_pb.Value = (int)(Math.Round(device.AudioMeterInformation.MasterPeakValue * 100));
+                progres_value.Text = System.Convert.ToString(peak_pb.Value);
 
                 // 音量を取得
                 var volume = GetVolume();
@@ -59,14 +59,14 @@ namespace VolumeController
                 //Debug.WriteLine(progressBar1.Value + volume);
                 //sum_trackBar.Value = (int)((GetVolume()/100.0d) * (progressBar1.Value / 100.0d));
                 
-                sum_trackBar.Value = (int)(GetVolume() * progressBar1.Value / 100);
+                sum_trackBar.Value = (int)(GetVolume() * peak_pb.Value / 100);
                 //sum_trackBar.Value = (int)(GetVolume() + progressBar1.Value / 200 / 2);
 
                 //max_trackBar.Value = (int)((GetVolume() / 100.0d) * (progressBar1.Value / 100.0d) * 100);
                 //Debug.WriteLine(sum_trackBar.Value);
 
                 // 最大の音量を制限
-                if ((sum_trackBar.Value > max_trackBar.Value) && progressBar1.Value != 0)
+                if ((sum_trackBar.Value > standard_trackBar.Value) && peak_pb.Value != 0)
                 {
                     // volumeの大きさによって下げる音量の幅を変更する
                     //SetVolume(volume - (int)Math.Ceiling((double)volume / 10.0d));
@@ -75,7 +75,7 @@ namespace VolumeController
                 }
 
                 // 最小の音量を制限
-                if ((sum_trackBar.Value) < (min_trackBar.Value) && progressBar1.Value != 0 && enable_timer == false)
+                if ((sum_trackBar.Value) < (min_trackBar.Value) && peak_pb.Value != 0 && enable_timer == false)
                 {
                     // volumeの大きさによって下げる音量の幅を変更する
                     //SetVolume(volume + (int)Math.Ceiling((double)volume / 10.0d));
@@ -84,15 +84,15 @@ namespace VolumeController
                     //
                     SetTimer();
                 }
-                if ((progressBar1.Value == 0) && volume_trackBar.Value != 0)
+                if ((peak_pb.Value == 0) && volume_trackBar.Value != 0)
                 {
                     SetVolume(0);
 
                 }
 
-                if (progressBar1.Value != 0 && volume_trackBar.Value == 0 && max_trackBar.Value != 100)
+                if (peak_pb.Value != 0 && volume_trackBar.Value == 0 && standard_trackBar.Value != 100)
                 {
-                    SetVolume(max_trackBar.Value);
+                    SetVolume(standard_trackBar.Value);
                 }
                 
 
@@ -108,7 +108,7 @@ namespace VolumeController
 
         private void max_trackBar_Scroll(object sender, EventArgs e)
         {
-            max_volume.Text = System.Convert.ToString(max_trackBar.Value);
+            standard_label.Text = System.Convert.ToString(standard_trackBar.Value);
         }
 
         private void min_trackBar_Scroll(object sender, EventArgs e)
@@ -134,8 +134,8 @@ namespace VolumeController
         private void max_btn_Click(object sender, EventArgs e)
         {
             //max_trackBar.Value = (int)Math.Floor((double)(GetVolume() * (progressBar1.Value / 100)) * 100.0d);
-            max_trackBar.Value = (int)(GetVolume() * progressBar1.Value / 100);
-            max_volume.Text = System.Convert.ToString(max_trackBar.Value);
+            standard_trackBar.Value = (int)(GetVolume() * peak_pb.Value / 100);
+            standard_label.Text = System.Convert.ToString(standard_trackBar.Value);
         }
 
         private void min_btn_Click(object sender, EventArgs e)
@@ -143,7 +143,7 @@ namespace VolumeController
             //min_trackBar.Value = (int)Math.Floor((double)(GetVolume() * progressBar1.Value) / 100.0d);
             //min_trackBar.Value = (int)(GetVolume() * (progressBar1.Value / 100.0d)) * 100;
             //min_trackBar.Value = (int)((GetVolume() / 100.0d) * (progressBar1.Value / 100.0d) * 100);
-            min_trackBar.Value = (int)(GetVolume() * progressBar1.Value / 100);
+            min_trackBar.Value = (int)(GetVolume() * peak_pb.Value / 100);
             min_volume.Text = System.Convert.ToString(min_trackBar.Value);
         }
 
@@ -188,7 +188,7 @@ namespace VolumeController
             }
             device.AudioEndpointVolume.MasterVolumeLevelScalar = ((float)volume / 100.0f);
             volume_trackBar.Value = volume;
-            label2.Text = System.Convert.ToString(volume);
+            volume_label.Text = System.Convert.ToString(volume);
 
 
             return GetVolume();
