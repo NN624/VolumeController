@@ -41,8 +41,11 @@
             this.media_btn = new System.Windows.Forms.Button();
             this.progres_value = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.standard_set_btn = new System.Windows.Forms.Button();
+            this.real_trackBar = new System.Windows.Forms.TrackBar();
             ((System.ComponentModel.ISupportInitialize)(this.volume_trackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.standard_trackBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.real_trackBar)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -65,7 +68,7 @@
             // 
             // peak_pb
             // 
-            this.peak_pb.Location = new System.Drawing.Point(12, 189);
+            this.peak_pb.Location = new System.Drawing.Point(12, 271);
             this.peak_pb.Name = "peak_pb";
             this.peak_pb.Size = new System.Drawing.Size(600, 73);
             this.peak_pb.TabIndex = 4;
@@ -73,7 +76,7 @@
             // devices_cmb
             // 
             this.devices_cmb.FormattingEnabled = true;
-            this.devices_cmb.Location = new System.Drawing.Point(170, 136);
+            this.devices_cmb.Location = new System.Drawing.Point(170, 226);
             this.devices_cmb.Name = "devices_cmb";
             this.devices_cmb.Size = new System.Drawing.Size(430, 28);
             this.devices_cmb.TabIndex = 5;
@@ -118,11 +121,11 @@
             this.standard_trackBar.Name = "standard_trackBar";
             this.standard_trackBar.Size = new System.Drawing.Size(333, 56);
             this.standard_trackBar.TabIndex = 9;
-            this.standard_trackBar.Scroll += new System.EventHandler(this.max_trackBar_Scroll);
+            this.standard_trackBar.Scroll += new System.EventHandler(this.standard_trackBar_Scroll);
             // 
             // media_btn
             // 
-            this.media_btn.Location = new System.Drawing.Point(509, 81);
+            this.media_btn.Location = new System.Drawing.Point(509, 12);
             this.media_btn.Name = "media_btn";
             this.media_btn.Size = new System.Drawing.Size(94, 29);
             this.media_btn.TabIndex = 11;
@@ -133,7 +136,7 @@
             // progres_value
             // 
             this.progres_value.AutoSize = true;
-            this.progres_value.Location = new System.Drawing.Point(129, 136);
+            this.progres_value.Location = new System.Drawing.Point(129, 226);
             this.progres_value.Name = "progres_value";
             this.progres_value.Size = new System.Drawing.Size(17, 20);
             this.progres_value.TabIndex = 12;
@@ -142,17 +145,37 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 136);
+            this.label5.Location = new System.Drawing.Point(12, 226);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(111, 20);
             this.label5.TabIndex = 13;
             this.label5.Text = "再生中の音量：";
             // 
+            // standard_set_btn
+            // 
+            this.standard_set_btn.Location = new System.Drawing.Point(509, 77);
+            this.standard_set_btn.Name = "standard_set_btn";
+            this.standard_set_btn.Size = new System.Drawing.Size(94, 29);
+            this.standard_set_btn.TabIndex = 14;
+            this.standard_set_btn.Text = "基準を設定";
+            this.standard_set_btn.UseVisualStyleBackColor = true;
+            this.standard_set_btn.Click += new System.EventHandler(this.standard_set_btn_Click);
+            // 
+            // real_trackBar
+            // 
+            this.real_trackBar.Location = new System.Drawing.Point(170, 133);
+            this.real_trackBar.Maximum = 100;
+            this.real_trackBar.Name = "real_trackBar";
+            this.real_trackBar.Size = new System.Drawing.Size(333, 56);
+            this.real_trackBar.TabIndex = 15;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(629, 293);
+            this.ClientSize = new System.Drawing.Size(629, 356);
+            this.Controls.Add(this.real_trackBar);
+            this.Controls.Add(this.standard_set_btn);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.progres_value);
             this.Controls.Add(this.media_btn);
@@ -168,6 +191,7 @@
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.volume_trackBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.standard_trackBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.real_trackBar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -186,5 +210,7 @@
         private Button media_btn;
         private Label progres_value;
         private Label label5;
+        private Button standard_set_btn;
+        private TrackBar real_trackBar;
     }
 }
