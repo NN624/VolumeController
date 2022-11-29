@@ -1,12 +1,15 @@
-# ŠT—v
-* ‰¹—Ê‚ğ•ÏX‚·‚éƒvƒƒOƒ‰ƒ€B
+# æ¦‚è¦
+* è‡ªå‹•ã§éŸ³é‡ã‚’å¤‰æ›´ã™ã‚‹ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã€‚
 
+# ç’°å¢ƒ
+* VisualStudio2022
+* C#
 
-# URL
-* [C#‚©‚çWindowsã‚Ìƒ{ƒŠƒ…[ƒ€‚Æ‹P“x‚ğ•ÏX‚·‚é•û–@ - DJ lemon-Sour's diary (prod.hisasann)](https://hisasann.github.io/2017/07/30/how-to-adjust-volume-and-brightness-on-windows/)
+# å‚è€ƒURL
+* [C#ã‹ã‚‰Windowsä¸Šã®ãƒœãƒªãƒ¥ãƒ¼ãƒ ã¨è¼åº¦ã‚’å¤‰æ›´ã™ã‚‹æ–¹æ³• - DJ lemon-Sour's diary (prod.hisasann)](https://hisasann.github.io/2017/07/30/how-to-adjust-volume-and-brightness-on-windows/)
 
-# •K—v‚ÈƒpƒbƒP[ƒW‚ÌƒCƒ“ƒXƒg[ƒ‹•û–@
-1. ƒc[ƒ‹
-2. NuGetƒpƒbƒP[ƒWƒ}ƒl[ƒWƒƒ[
-3. ƒ\ƒŠƒ…[ƒVƒ‡ƒ“‚ÌNuGetƒpƒbƒP[ƒW‚ÌŠÇ—
-4. QÆƒ^ƒu‚Åunaudiov‚ğŒŸõ‚µuNAudiov‚ğƒCƒ“ƒXƒg[ƒ‹
+# å¿…è¦ãªãƒ‘ãƒƒã‚±ãƒ¼ã‚¸ã®ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«æ–¹æ³•
+1. ä¸Šã®ãƒãƒ¼ã®ã€Œãƒ„ãƒ¼ãƒ«ã€
+2. ã€ŒNuGetãƒ‘ãƒƒã‚±ãƒ¼ã‚¸ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã€
+3. ã€Œã‚½ãƒªãƒ¥ãƒ¼ã‚·ãƒ§ãƒ³ã®NuGetãƒ‘ãƒƒã‚±ãƒ¼ã‚¸ã®ç®¡ç†ã€
+4. å‚ç…§ã‚¿ãƒ–ã§ã€Œnaudioã€ã¨æ¤œç´¢ã—ã€ŒNAudioã€ã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«
