@@ -144,12 +144,25 @@ namespace VolumeController
             {
                 waveOut.Init(afr);
                 waveOut.Play();
-                media_btn.Text = "stop";
+                media_btn.Text = "サンプル停止";
             }
             else if (waveOut.PlaybackState == PlaybackState.Playing)
             {
                 waveOut.Stop();
-                media_btn.Text = "play";
+                media_btn.Text = "サンプル再生";
+            }
+        }
+        private void active_btn_Click(object sender, EventArgs e)
+        {
+            if (timer1.Enabled)
+            {
+                timer1.Stop();
+                active_btn.Text = "起動";
+            }
+            else
+            {
+                timer1.Start();
+                active_btn.Text = "停止";
             }
         }
 
@@ -232,7 +245,7 @@ namespace VolumeController
             return devices.ToArray();
         }
 
-
+        
     }
 
     /*
