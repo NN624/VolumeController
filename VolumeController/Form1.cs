@@ -40,6 +40,7 @@ namespace VolumeController
             volume_trackBar.Value = GetVolume();
             // デバイスの一覧を取得
             devices_cmb.Items.AddRange(GetDevices());
+            devices_cmb.SelectedIndex = 0;
         }
 
         // 1ミリ秒間隔で繰り返し続ける
@@ -59,6 +60,22 @@ namespace VolumeController
                 // 音量を変更
                 if (peak_pb.Value != 0)
                 {
+                    
+                    // switchみたいな音量調整　基準を使ったバージョン
+                    if (peak_pb.Value > 80)
+                    {
+                        SetVolume(3);
+                    }
+                    else if (peak_pb.Value > 30)
+                    {
+                        SetVolume(6);
+                    }
+                    else
+                    {
+                        SetVolume(9);
+                    }
+
+                    /*
                     // switchみたいな音量調整
                     if (peak_pb.Value > 80)
                     {
@@ -72,6 +89,7 @@ namespace VolumeController
                     {
                         SetVolume(9);
                     }
+                    */
 
                     /*
                     // 基準で音量調整

@@ -100,11 +100,11 @@
             // label
             // 
             this.label.AutoSize = true;
-            this.label.Location = new System.Drawing.Point(53, 81);
+            this.label.Location = new System.Drawing.Point(12, 81);
             this.label.Name = "label";
-            this.label.Size = new System.Drawing.Size(54, 20);
+            this.label.Size = new System.Drawing.Size(96, 20);
             this.label.TabIndex = 7;
-            this.label.Text = "基準：";
+            this.label.Text = "基準の音量：";
             // 
             // standard_label
             // 
@@ -160,6 +160,7 @@
             this.standard_set_btn.TabIndex = 14;
             this.standard_set_btn.Text = "基準を設定";
             this.standard_set_btn.UseVisualStyleBackColor = true;
+            this.standard_set_btn.Visible = false;
             this.standard_set_btn.Click += new System.EventHandler(this.standard_set_btn_Click);
             // 
             // real_trackBar
@@ -169,6 +170,7 @@
             this.real_trackBar.Name = "real_trackBar";
             this.real_trackBar.Size = new System.Drawing.Size(333, 56);
             this.real_trackBar.TabIndex = 15;
+            this.real_trackBar.Visible = false;
             // 
             // active_btn
             // 
