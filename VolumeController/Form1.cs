@@ -18,8 +18,8 @@ namespace VolumeController
     {
 
         // 音量を上げすぎないようにするためのタイマー
-        private static System.Timers.Timer aTimer;
-        public static bool enable_timer = false;
+        //private static System.Timers.Timer aTimer;
+        //public static bool enable_timer = false;
 
         // デバイスを検索するための設定
         MMDeviceEnumerator DevEnum = new MMDeviceEnumerator();
@@ -60,20 +60,39 @@ namespace VolumeController
                 // 音量を変更
                 if (peak_pb.Value != 0)
                 {
-                    
+                    string status = "";
+                    int diff = real_trackBar.Value;
                     // switchみたいな音量調整　基準を使ったバージョン
-                    if (peak_pb.Value > 80)
+                    if (peak_pb.Value > 80 && standard_trackBar.Value - diff < GetVolume())
                     {
-                        SetVolume(3);
+                        SetVolume(GetVolume() - 1);
+                        status += "↓" + GetVolume();
+                        //Debug.WriteLine("↓" + GetVolume());
                     }
                     else if (peak_pb.Value > 30)
                     {
-                        SetVolume(6);
+                        //SetVolume(standard_trackBar.Value);
+                        // Debug.WriteLine(diff);
                     }
-                    else
+                    else if (peak_pb.Value > 0 && standard_trackBar.Value + diff > GetVolume())
                     {
-                        SetVolume(9);
+                        SetVolume(GetVolume() + 1);
+                        status += "↑" + GetVolume();
+                        //Debug.WriteLine("↑" + GetVolume());
                     }
+
+                    // 範囲外の場合の音量修正
+                    if (standard_trackBar.Value - diff > GetVolume())
+                    {
+                        SetVolume(standard_trackBar.Value - diff+1);
+                        status += "set " + (standard_trackBar.Value - diff + 1);
+                    }
+                    else if (standard_trackBar.Value + diff < GetVolume())
+                    {
+                        SetVolume(standard_trackBar.Value + diff-1);
+                        status += "set " + (standard_trackBar.Value + diff - 1);
+                    }
+                    Debug.WriteLine(status);
 
                     /*
                     // switchみたいな音量調整
@@ -240,12 +259,13 @@ namespace VolumeController
 
         }
         */
+        /*
         private static void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
             enable_timer = false;
             Debug.WriteLine("stop");
         }
-
+        */
         /*
         public void update()
         {
@@ -287,7 +307,10 @@ namespace VolumeController
             return devices.ToArray();
         }
 
-        
+        private void real_trackBar_Scroll(object sender, EventArgs e)
+        {
+            real_trackBar_label.Text = System.Convert.ToString(real_trackBar.Value);
+        }
     }
 
     /*

@@ -44,6 +44,8 @@
             this.standard_set_btn = new System.Windows.Forms.Button();
             this.real_trackBar = new System.Windows.Forms.TrackBar();
             this.active_btn = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.real_trackBar_label = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.volume_trackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.standard_trackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.real_trackBar)).BeginInit();
@@ -170,7 +172,7 @@
             this.real_trackBar.Name = "real_trackBar";
             this.real_trackBar.Size = new System.Drawing.Size(333, 56);
             this.real_trackBar.TabIndex = 15;
-            this.real_trackBar.Visible = false;
+            this.real_trackBar.Scroll += new System.EventHandler(this.real_trackBar_Scroll);
             // 
             // active_btn
             // 
@@ -179,15 +181,35 @@
             this.active_btn.Name = "active_btn";
             this.active_btn.Size = new System.Drawing.Size(94, 31);
             this.active_btn.TabIndex = 16;
-            this.active_btn.Text = "起動";
+            this.active_btn.Text = "停止";
             this.active_btn.UseVisualStyleBackColor = true;
             this.active_btn.Click += new System.EventHandler(this.active_btn_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 142);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(96, 20);
+            this.label2.TabIndex = 17;
+            this.label2.Text = "音量の範囲：";
+            // 
+            // real_trackBar_label
+            // 
+            this.real_trackBar_label.AutoSize = true;
+            this.real_trackBar_label.Location = new System.Drawing.Point(113, 142);
+            this.real_trackBar_label.Name = "real_trackBar_label";
+            this.real_trackBar_label.Size = new System.Drawing.Size(17, 20);
+            this.real_trackBar_label.TabIndex = 18;
+            this.real_trackBar_label.Text = "0";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(629, 323);
+            this.Controls.Add(this.real_trackBar_label);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.active_btn);
             this.Controls.Add(this.real_trackBar);
             this.Controls.Add(this.standard_set_btn);
@@ -228,5 +250,7 @@
         private Button standard_set_btn;
         private TrackBar real_trackBar;
         private Button active_btn;
+        private Label label2;
+        private Label real_trackBar_label;
     }
 }
