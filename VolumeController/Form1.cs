@@ -59,23 +59,47 @@ namespace VolumeController
                 // 音量を変更
                 if (peak_pb.Value != 0)
                 {
-                    // ピークと音量の基準
+                    // switchみたいな音量調整
+                    if (peak_pb.Value > 80)
+                    {
+                        SetVolume(3);
+                    }
+                    else if (peak_pb.Value > 30)
+                    {
+                        SetVolume(6);
+                    }
+                    else
+                    {
+                        SetVolume(9);
+                    }
+
+                    /*
+                    // 基準で音量調整
+                    // 設定されている基準
                     //double a = (GetVolume() * peak_pb.Value)/10000.0d;
-                    double b = (GetVolume() + peak_pb.Value) / 200.0d;
-                    
+                    double now_standard = (GetVolume() + peak_pb.Value) / 200.0d;
+
+                    // 設定されている基準の値と現在の基準を等しくするための音量を計算
                     double c = System.Convert.ToDouble(standard_label.Text)/100.0d * 200.0d - peak_pb.Value;
                     real_trackBar.Value = (int)(((c + (double)peak_pb.Value) / 200.0d)*100);
-                    // 0, 0.355, 0
-                    // a:0.71,b:0.855,c:100
-                    //Debug.WriteLine("a:" + a + ",b:" + b + ",c:" + c);
-                    Debug.WriteLine("c:" + c);
 
-                    if (c > 0)
+                    Debug.WriteLine("a:" + (double)standard_trackBar.Value / 100.0d + ",b:" + now_standard);
+                    if (Math.Abs(standard_trackBar.Value/100 - now_standard) < 0.1)
+                    {
+                        //Debug.WriteLine(Math.Abs(standard_trackBar.Value / 100 - now_standard));
+                    }
+                    else if (c > 0)
                     {
                         SetVolume((int)c);
                     }
+
+                    // 0, 0.355, 0
+                    // a:0.71,b:0.855,c:100
+                    //Debug.WriteLine("a:" + standard_label.Text + ",b:" + real_trackBar.Value + ",c:" + c);
+                    //Debug.WriteLine("c:" + c);
                     
                     //SetVolume(GetVolume() * peak_pb.Value);
+                    */
                 }
                 else
                 {
