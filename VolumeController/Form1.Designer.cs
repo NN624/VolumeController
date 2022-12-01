@@ -44,6 +44,7 @@
             this.standard_set_btn = new System.Windows.Forms.Button();
             this.real_trackBar = new System.Windows.Forms.TrackBar();
             this.active_btn = new System.Windows.Forms.Button();
+            this.real_trackbar_label = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.volume_trackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.standard_trackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.real_trackBar)).BeginInit();
@@ -181,11 +182,21 @@
             this.active_btn.UseVisualStyleBackColor = true;
             this.active_btn.Click += new System.EventHandler(this.active_btn_Click);
             // 
+            // real_trackbar_label
+            // 
+            this.real_trackbar_label.AutoSize = true;
+            this.real_trackbar_label.Location = new System.Drawing.Point(117, 143);
+            this.real_trackbar_label.Name = "real_trackbar_label";
+            this.real_trackbar_label.Size = new System.Drawing.Size(17, 20);
+            this.real_trackbar_label.TabIndex = 17;
+            this.real_trackbar_label.Text = "0";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(629, 323);
+            this.Controls.Add(this.real_trackbar_label);
             this.Controls.Add(this.active_btn);
             this.Controls.Add(this.real_trackBar);
             this.Controls.Add(this.standard_set_btn);
@@ -226,5 +237,6 @@
         private Button standard_set_btn;
         private TrackBar real_trackBar;
         private Button active_btn;
+        private Label real_trackbar_label;
     }
 }

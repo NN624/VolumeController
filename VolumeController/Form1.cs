@@ -27,7 +27,8 @@ namespace VolumeController
 
         // サンプル再生用の準備
         WaveOutEvent waveOut = new WaveOutEvent();
-        AudioFileReader afr = new AudioFileReader("../../../400hz-9db-20sec.wav");
+        //AudioFileReader afr = new AudioFileReader("../../../400hz-9db-20sec.wav");
+        AudioFileReader afr = new AudioFileReader("C:\\Users\\s192034.TSITCL\\OneDrive - Cyber University\\School\\卒業研究\\VolumeController\\VolumeController\\400hz-3db-20sec.wav");
 
         public Form1()
         {
@@ -54,7 +55,33 @@ namespace VolumeController
                 progres_value.Text = System.Convert.ToString(peak_pb.Value);
 
                 // PCの音量を取得
-                //var volume = GetVolume();
+                var volume = GetVolume();
+
+                /*
+                // 基準に誤差範囲を持たせる
+                real_trackBar.Value = (GetVolume() + peak_pb.Value) / 2;
+                real_trackbar_label.Text = System.Convert.ToString(real_trackBar.Value);
+                // 誤差範囲
+                int diff = 5;
+                int min = standard_trackBar.Value - diff;
+                int max = standard_trackBar.Value + diff;
+
+                if (peak_pb.Value != 0)
+                {
+                    // 最大の音量を制限
+                    if (real_trackBar.Value > max)
+                    {
+                        SetVolume(volume - 1);
+                    }
+                    // 最小の音量を制限
+                    if (real_trackBar.Value < min)
+                    {
+                        SetVolume(volume + 1);
+                    }
+                    
+                }
+                */
+
 
                 // 音量を変更
                 if (peak_pb.Value != 0)
@@ -62,59 +89,31 @@ namespace VolumeController
                     // ピークと音量の基準
                     //double a = (GetVolume() * peak_pb.Value)/10000.0d;
                     double b = (GetVolume() + peak_pb.Value) / 200.0d;
+                    // real_trackbarをstandared_trackbarと同じ位置にするための音量を計算
+                    double change_volume = System.Convert.ToDouble(standard_label.Text) / 100.0d * 200.0d - peak_pb.Value;
+                    real_trackBar.Value = (int)(((change_volume + (double)peak_pb.Value) / 200.0d) * 100);
 
-                    double c = System.Convert.ToDouble(standard_label.Text) / 100.0d * 200.0d - peak_pb.Value;
-                    real_trackBar.Value = (int)(((c + (double)peak_pb.Value) / 200.0d) * 100);
-                    // 0, 0.355, 0
-                    // a:0.71,b:0.855,c:100
-                    //Debug.WriteLine("a:" + a + ",b:" + b + ",c:" + c);
-                    Debug.WriteLine("c:" + c);
+                    //Debug.WriteLine("a:" + a + ",b:" + b + ",change_volume:" + change_volume);
+                    //Debug.WriteLine("change_volume:" + change_volume);
 
-                    if (c > 0)
+
+                    if (change_volume > 0)
                     {
-                        SetVolume((int)c);
+                        // 音量を下げる
+                        if (volume > change_volume)
+                        {
+                            SetVolume(volume - 1);
+                            Debug.WriteLine("↓volume:" + volume + " > change_volume:" + change_volume);
+                        }
+                        // 音量上げる
+                        else if (volume < change_volume)
+                        {
+                            SetVolume(volume + 1);
+                            Debug.WriteLine("↑volume:" + volume + " < change_volume:" + change_volume);
+                        }
+                        
                     }
-
-                    //SetVolume(GetVolume() * peak_pb.Value);
                 }
-                else
-                {
-
-                }
-
-                // 最大の音量を制限
-                /*
-                if ((sum_trackBar.Value > standard_trackBar.Value) && peak_pb.Value != 0)
-                {
-                    // volumeの大きさによって下げる音量の幅を変更する
-                    //SetVolume(volume - (int)Math.Ceiling((double)volume / 10.0d));
-                    SetVolume(volume - 1);
-                    volume_trackBar.Value = volume;
-                }
-
-                // 最小の音量を制限
-                if ((sum_trackBar.Value) < (min_trackBar.Value) && peak_pb.Value != 0 && enable_timer == false)
-                {
-                    // volumeの大きさによって下げる音量の幅を変更する
-                    //SetVolume(volume + (int)Math.Ceiling((double)volume / 10.0d));
-                    SetVolume(volume + 1);
-                    volume_trackBar.Value = volume;
-                    //
-                    SetTimer();
-                }
-                
-                if ((peak_pb.Value == 0) && volume_trackBar.Value != 0)
-                {
-                    SetVolume(0);
-
-                }
-
-                if (peak_pb.Value != 0 && volume_trackBar.Value == 0 && standard_trackBar.Value != 100)
-                {
-                    SetVolume(standard_trackBar.Value);
-                }
-                */
-
 
                 // サンプル音源のループ
                 afr.Position = 0;
@@ -215,7 +214,7 @@ namespace VolumeController
         // メソッド:音量の変更
         public int SetVolume(int volume)
         {
-            // 音量を変更（範囲：0.0～1.0）
+            // 音量を変更（範囲：0.00～1.00）
             if (volume < 0)
             {
                 volume = 0;
