@@ -91,14 +91,19 @@ namespace VolumeController
                     double b = (GetVolume() + peak_pb.Value) / 200.0d;
                     // real_trackbarÇstandared_trackbarÇ∆ìØÇ∂à íuÇ…Ç∑ÇÈÇΩÇﬂÇÃâπó ÇåvéZ
                     double change_volume = System.Convert.ToDouble(standard_label.Text) / 100.0d * 200.0d - peak_pb.Value;
-                    real_trackBar.Value = (int)(((change_volume + (double)peak_pb.Value) / 200.0d) * 100);
+                    // real_trackBar.Value = (int)(((change_volume + (double)peak_pb.Value) / 200.0d) * 100);
+                    real_trackBar.Value = (int)(GetVolume() + peak_pb.Value) / 2;
+                    real_trackbar_label.Text = System.Convert.ToString(real_trackBar.Value);
+                    
 
                     //Debug.WriteLine("a:" + a + ",b:" + b + ",change_volume:" + change_volume);
                     //Debug.WriteLine("change_volume:" + change_volume);
 
-
+                    
                     if (change_volume > 0)
                     {
+                        SetVolume((int)change_volume);
+                        /*
                         // âπó Çâ∫Ç∞ÇÈ
                         if (volume > change_volume)
                         {
@@ -111,7 +116,7 @@ namespace VolumeController
                             SetVolume(volume + 1);
                             Debug.WriteLine("Å™volume:" + volume + " < change_volume:" + change_volume);
                         }
-                        
+                        */
                     }
                 }
 
