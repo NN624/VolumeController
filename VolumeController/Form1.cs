@@ -29,6 +29,8 @@ namespace VolumeController
         WaveOutEvent waveOut = new WaveOutEvent();
         AudioFileReader afr = new AudioFileReader("../../../400hz-9db-20sec.wav");
 
+        public int volume = 0;
+
         public Form1()
         {
             InitializeComponent();
@@ -60,37 +62,45 @@ namespace VolumeController
                 // 音量を変更
                 if (peak_pb.Value != 0)
                 {
-                    string status = "";
+                    
                     int diff = real_trackBar.Value;
+                    int max = standard_trackBar.Value + diff;
+                    int min = standard_trackBar.Value - diff;
+                    //int volume = GetVolume();
+                    string status = "diff:" + diff + " ,min:" + min + " ,max:" + max + " ,volume:" + volume + " ,";
                     // switchみたいな音量調整　基準を使ったバージョン
-                    if (peak_pb.Value > 80 && standard_trackBar.Value - diff < GetVolume())
+                    if (peak_pb.Value > 50 && standard_trackBar.Value - diff < volume)
                     {
-                        SetVolume(GetVolume() - 1);
-                        status += "↓" + GetVolume();
-                        //Debug.WriteLine("↓" + GetVolume());
+                        volume -= 1;
+                        
+                        status += "↓" + SetVolume(volume);
+                        //Debug.WriteLine("↓" + volume);
                     }
+                    /*
                     else if (peak_pb.Value > 30)
                     {
                         //SetVolume(standard_trackBar.Value);
                         // Debug.WriteLine(diff);
                     }
-                    else if (peak_pb.Value > 0 && standard_trackBar.Value + diff > GetVolume())
+                    */
+                    else if (peak_pb.Value > 0 && standard_trackBar.Value + diff > volume)
                     {
-                        SetVolume(GetVolume() + 1);
-                        status += "↑" + GetVolume();
-                        //Debug.WriteLine("↑" + GetVolume());
+                        volume += 1;
+                        
+                        status += "↑" + SetVolume(volume);
+                        //Debug.WriteLine("↑" + volume);
                     }
 
                     // 範囲外の場合の音量修正
-                    if (standard_trackBar.Value - diff > GetVolume())
+                    if (standard_trackBar.Value - diff > volume)
                     {
-                        SetVolume(standard_trackBar.Value - diff+1);
-                        status += "set " + (standard_trackBar.Value - diff + 1);
+                        
+                        status += "set " + SetVolume(standard_trackBar.Value - diff + 0);
                     }
-                    else if (standard_trackBar.Value + diff < GetVolume())
+                    else if (standard_trackBar.Value + diff < volume)
                     {
-                        SetVolume(standard_trackBar.Value + diff-1);
-                        status += "set " + (standard_trackBar.Value + diff - 1);
+                        
+                        status += "set " + SetVolume(standard_trackBar.Value + diff - 0);
                     }
                     Debug.WriteLine(status);
 
@@ -138,10 +148,6 @@ namespace VolumeController
                     //SetVolume(GetVolume() * peak_pb.Value);
                     */
                 }
-                else
-                {
-
-                }
 
                 // 最大の音量を制限
                 /*
@@ -178,7 +184,7 @@ namespace VolumeController
                 
 
                 // サンプル音源のループ
-                afr.Position = 0;
+                //afr.Position = 0;
             }
         }
 
@@ -275,28 +281,41 @@ namespace VolumeController
 
 
         // メソッド:音量の変更
-        public int SetVolume(int volume)
+        public int SetVolume(int arg_volume)
         {
             // 音量を変更（範囲：0.0～1.0）
-            if (volume < 0)
+            string a = "before:" + arg_volume + ", " + (float)arg_volume / 100.0f;
+            Debug.WriteLine(a);
+            if (arg_volume < 0)
             {
-                volume = 0;
-            }else if (volume > 100)
+                arg_volume = 0;
+            }else if (arg_volume > 100)
             {
-                volume = 100;
+                arg_volume = 100;
             }
-            device.AudioEndpointVolume.MasterVolumeLevelScalar = ((float)volume / 100.0f);
-            volume_trackBar.Value = volume;
-            volume_label.Text = System.Convert.ToString(volume);
+            device.AudioEndpointVolume.MasterVolumeLevelScalar = ((float)arg_volume / 100.0f);
+            volume_trackBar.Value = arg_volume;
+            volume_label.Text = System.Convert.ToString(arg_volume);
+            volume = arg_volume;
+            if(arg_volume == volume)
+            {
+                Debug.WriteLine("OK");
+            }
+            else
+            {
+                volume = arg_volume;
+            }
 
 
-            return GetVolume();
+
+            return arg_volume;
         }
 
         // メソッド：音量の取得 return：0.00～1.00 
         public int GetVolume()
         {
-            return (int)(device.AudioEndpointVolume.MasterVolumeLevelScalar * 100);
+            volume = (int)(device.AudioEndpointVolume.MasterVolumeLevelScalar * 100);
+            return volume;
         }
 
         // メソッド：デバイスの一覧を取得
