@@ -18,8 +18,10 @@ namespace VolumeController
     {
 
         // 音量を上げすぎないようにするためのタイマー
-        //private static System.Timers.Timer aTimer;
-        //public static bool enable_timer = false;
+        private static System.Timers.Timer upTimer;
+        public static bool up_enable_timer = false;
+        private static System.Timers.Timer dwTimer;
+        public static bool dw_enable_timer = false;
 
         // デバイスを検索するための設定
         MMDeviceEnumerator DevEnum = new MMDeviceEnumerator();
@@ -69,10 +71,10 @@ namespace VolumeController
                     //int volume = GetVolume();
                     string status = "diff:" + diff + " ,min:" + min + " ,max:" + max + " ,volume:" + volume + " ,";
                     // switchみたいな音量調整　基準を使ったバージョン
-                    if (peak_pb.Value > 50 && standard_trackBar.Value - diff < volume)
+                    if (peak_pb.Value > 50 && standard_trackBar.Value - diff < volume && dw_enable_timer == false)
                     {
                         volume -= 1;
-                        
+                        DwSetTimer();
                         status += "↓" + SetVolume(volume);
                         //Debug.WriteLine("↓" + volume);
                     }
@@ -83,11 +85,12 @@ namespace VolumeController
                         // Debug.WriteLine(diff);
                     }
                     */
-                    else if (peak_pb.Value > 0 && standard_trackBar.Value + diff > volume)
+                    else if (peak_pb.Value > 0 && standard_trackBar.Value + diff > volume && up_enable_timer == false)
                     {
                         volume += 1;
                         
                         status += "↑" + SetVolume(volume);
+                        UpSetTimer();
                         //Debug.WriteLine("↑" + volume);
                     }
 
@@ -160,14 +163,14 @@ namespace VolumeController
                 }
 
                 // 最小の音量を制限
-                if ((sum_trackBar.Value) < (min_trackBar.Value) && peak_pb.Value != 0 && enable_timer == false)
+                if ((sum_trackBar.Value) < (min_trackBar.Value) && peak_pb.Value != 0 && up_enable_timer == false)
                 {
                     // volumeの大きさによって下げる音量の幅を変更する
                     //SetVolume(volume + (int)Math.Ceiling((double)volume / 10.0d));
                     SetVolume(volume + 1);
                     volume_trackBar.Value = volume;
                     //
-                    SetTimer();
+                    UpSetTimer();
                 }
                 
                 if ((peak_pb.Value == 0) && volume_trackBar.Value != 0)
@@ -249,29 +252,44 @@ namespace VolumeController
             //min_trackBar.Value = (int)(GetVolume() * peak_pb.Value / 100);
             //min_volume.Text = System.Convert.ToString(min_trackBar.Value);
         }
-
+        */
         // 音量の短時間連続上昇を防ぐ
-        private static void SetTimer()
+        private static void UpSetTimer()
         {
             // Create a timer with a two second interval.
-            // １秒
-            aTimer = new System.Timers.Timer(5000);
-            Debug.WriteLine("start");
+            // １s=1000ms
+            upTimer = new System.Timers.Timer(2000);
+            //Debug.WriteLine("start");
             // Hook up the Elapsed event for the timer.
-            enable_timer = true;
-            aTimer.Elapsed += OnTimedEvent;
-            aTimer.AutoReset = false;
-            aTimer.Enabled = true;
+            up_enable_timer = true;
+            upTimer.Elapsed += UpOnTimedEvent;
+            upTimer.AutoReset = false;
+            upTimer.Enabled = true;
 
         }
-        */
-        /*
-        private static void OnTimedEvent(Object source, ElapsedEventArgs e)
+        private static void UpOnTimedEvent(Object source, ElapsedEventArgs e)
         {
-            enable_timer = false;
-            Debug.WriteLine("stop");
+            up_enable_timer = false;
+            //Debug.WriteLine("stop");
         }
-        */
+        private static void DwSetTimer()
+        {
+            // Create a timer with a two second interval.
+            // １s=1000ms
+            upTimer = new System.Timers.Timer(2000);
+            //Debug.WriteLine("start");
+            // Hook up the Elapsed event for the timer.
+            dw_enable_timer = true;
+            upTimer.Elapsed += DwOnTimedEvent;
+            upTimer.AutoReset = false;
+            upTimer.Enabled = true;
+
+        }
+        private static void DwOnTimedEvent(Object source, ElapsedEventArgs e)
+        {
+            dw_enable_timer = false;
+            //Debug.WriteLine("stop");
+        }
         /*
         public void update()
         {
@@ -331,43 +349,4 @@ namespace VolumeController
             real_trackBar_label.Text = System.Convert.ToString(real_trackBar.Value);
         }
     }
-
-    /*
-    // 音量調整をする
-    class VolumeController
-    {
-        public MMDevice device;
-
-        // VolumeControllerのコンストラクター
-        public VolumeController()
-        {
-            MMDeviceEnumerator DevEnum = new MMDeviceEnumerator();
-            device = DevEnum.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
-        }
-
-        // メソッド:音量の変更
-        public int SetVolume(int volume)
-        {
-            // 音量を変更（範囲：0.0～1.0）
-            volume = volume < 0 ? 0 : volume;
-            device.AudioEndpointVolume.MasterVolumeLevelScalar = ((float)volume / 100.0f);
-
-            return GetVolume();
-        }
-
-        // メソッド：音量の取得
-        public int GetVolume()
-        {
-            return (int)(device.AudioEndpointVolume.MasterVolumeLevelScalar * 100);
-        }
-
-        // メソッド：デバイスの一覧を取得
-        public object[] GetDevices()
-        {
-            MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
-            var devices = enumerator.EnumerateAudioEndPoints(DataFlow.All, DeviceState.Active);
-            return devices.ToArray();
-        }
-    }
-    */
 }
