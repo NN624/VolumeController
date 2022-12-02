@@ -59,7 +59,7 @@ namespace VolumeController
                 progres_value.Text = System.Convert.ToString(peak_pb.Value);
 
                 // PCの音量を取得
-                //var volume = GetVolume();
+                volume = GetVolume();
 
                 // 音量を変更
                 if (peak_pb.Value != 0)
@@ -73,7 +73,7 @@ namespace VolumeController
                     // switchみたいな音量調整　基準を使ったバージョン
                     if (peak_pb.Value > 50 && standard_trackBar.Value - diff < volume && dw_enable_timer == false)
                     {
-                        volume -= 1;
+                        volume -= 2;
                         DwSetTimer();
                         status += "↓" + SetVolume(volume);
                         //Debug.WriteLine("↓" + volume);
@@ -258,7 +258,7 @@ namespace VolumeController
         {
             // Create a timer with a two second interval.
             // １s=1000ms
-            upTimer = new System.Timers.Timer(2000);
+            upTimer = new System.Timers.Timer(500);
             //Debug.WriteLine("start");
             // Hook up the Elapsed event for the timer.
             up_enable_timer = true;
@@ -276,13 +276,13 @@ namespace VolumeController
         {
             // Create a timer with a two second interval.
             // １s=1000ms
-            upTimer = new System.Timers.Timer(2000);
+            dwTimer = new System.Timers.Timer(500);
             //Debug.WriteLine("start");
             // Hook up the Elapsed event for the timer.
             dw_enable_timer = true;
-            upTimer.Elapsed += DwOnTimedEvent;
-            upTimer.AutoReset = false;
-            upTimer.Enabled = true;
+            dwTimer.Elapsed += DwOnTimedEvent;
+            dwTimer.AutoReset = false;
+            dwTimer.Enabled = true;
 
         }
         private static void DwOnTimedEvent(Object source, ElapsedEventArgs e)
