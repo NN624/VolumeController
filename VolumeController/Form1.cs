@@ -23,11 +23,12 @@ namespace VolumeController
 
         MMDeviceEnumerator DevEnum = new MMDeviceEnumerator();
         public MMDevice device;
-
+        int mintrack = 0;
+        int initvalue = 0;
 
         // サンプル再生用の準備
         WaveOutEvent waveOut = new WaveOutEvent();
-        AudioFileReader afr = new AudioFileReader("C:\\Users\\s192034.TSITCL\\OneDrive - Cyber University\\School\\卒業研究\\GraduationResearch\\VolumeController\\VolumeController\\400hz-9db-20sec.wav");
+        AudioFileReader afr = new AudioFileReader("../../../400hz-9db-20sec.wav");
         //AudioFileReader afr = new AudioFileReader("C:\\Users\\s192034.TSITCL\\OneDrive - Cyber University\\School\\卒業研究\\GraduationResearch\\VolumeController\\VolumeController\\5khz-6db-20sec.wav");
 
         public Form1()
@@ -41,13 +42,16 @@ namespace VolumeController
             volume_trackBar.Value = GetVolume();
             // デバイスの一覧を取得
             comboBox1.Items.AddRange(GetDevices());
+            root_maxtrackBar.Value = (int)100;
+
+
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
             if (comboBox1.SelectedItem != null)
             {
-                
+
                 var device = (MMDevice)comboBox1.SelectedItem;
                 // progressBar1の値を変更
                 progressBar1.Value = (int)(Math.Round(device.AudioMeterInformation.MasterPeakValue * 100));
@@ -58,43 +62,49 @@ namespace VolumeController
                 // Debug.WriteLine(progressBar1.Value * volume);
                 //Debug.WriteLine(progressBar1.Value + volume);
                 //sum_trackBar.Value = (int)((GetVolume()/100.0d) * (progressBar1.Value / 100.0d));
-                
+
                 sum_trackBar.Value = (int)(GetVolume() * progressBar1.Value / 100);
                 //sum_trackBar.Value = (int)(GetVolume() + progressBar1.Value / 200 / 2);
-
+                label11.Text = System.Convert.ToString(GetVolume() * progressBar1.Value / 100);
+                int sumtrack = (int)(GetVolume() * progressBar1.Value / 100);
                 //max_trackBar.Value = (int)((GetVolume() / 100.0d) * (progressBar1.Value / 100.0d) * 100);
                 //Debug.WriteLine(sum_trackBar.Value);
 
                 // 最大の音量を制限
-                if ((sum_trackBar.Value > max_trackBar.Value) && progressBar1.Value != 0)
+                if ((sum_trackBar.Value > root_maxtrackBar.Value) && progressBar1.Value != 0)
                 {
                     // volumeの大きさによって下げる音量の幅を変更する
                     //SetVolume(volume - (int)Math.Ceiling((double)volume / 10.0d));
                     SetVolume(volume - 1);
                     volume_trackBar.Value = volume;
+
+                    SetTimer();
                 }
 
                 // 最小の音量を制限
-                if ((sum_trackBar.Value) < (min_trackBar.Value) && progressBar1.Value != 0 && enable_timer == false)
+                if ((sum_trackBar.Value < root_mintrackBar.Value) && progressBar1.Value != 0 && enable_timer == false)
+                //if (( sumtrack < mintrack))
                 {
                     // volumeの大きさによって下げる音量の幅を変更する
                     //SetVolume(volume + (int)Math.Ceiling((double)volume / 10.0d));
-                    SetVolume(volume + 1);
+                    SetVolume(volume + 2);
                     volume_trackBar.Value = volume;
                     //
                     SetTimer();
                 }
                 if ((progressBar1.Value == 0) && volume_trackBar.Value != 0)
                 {
-                    SetVolume(0);
+                    //initvalue = (int)(GetVolume() * progressBar1.Value / 100);
+                    SetVolume(volume);
+
 
                 }
 
                 if (progressBar1.Value != 0 && volume_trackBar.Value == 0 && max_trackBar.Value != 100)
                 {
-                    SetVolume(max_trackBar.Value);
+                    //SetVolume(max_trackBar.Value);
                 }
-                
+
 
                 // サンプル音源のループ
                 afr.Position = 0;
@@ -134,8 +144,13 @@ namespace VolumeController
         private void max_btn_Click(object sender, EventArgs e)
         {
             //max_trackBar.Value = (int)Math.Floor((double)(GetVolume() * (progressBar1.Value / 100)) * 100.0d);
-            max_trackBar.Value = (int)(GetVolume() * progressBar1.Value / 100);
+            max_trackBar.Value = (int)(volume_trackBar.Value);
             max_volume.Text = System.Convert.ToString(max_trackBar.Value);
+
+            root_maxtrackBar.Value = (int)(GetVolume() * progressBar1.Value / 100);
+            label10.Text = System.Convert.ToString(GetVolume() * progressBar1.Value / 100);
+
+
         }
 
         private void min_btn_Click(object sender, EventArgs e)
@@ -143,8 +158,16 @@ namespace VolumeController
             //min_trackBar.Value = (int)Math.Floor((double)(GetVolume() * progressBar1.Value) / 100.0d);
             //min_trackBar.Value = (int)(GetVolume() * (progressBar1.Value / 100.0d)) * 100;
             //min_trackBar.Value = (int)((GetVolume() / 100.0d) * (progressBar1.Value / 100.0d) * 100);
-            min_trackBar.Value = (int)(GetVolume() * progressBar1.Value / 100);
+            //min_trackBar.Value = (int)(GetVolume() * progressBar1.Value / 100);
+            min_trackBar.Value = (int)(volume_trackBar.Value);
             min_volume.Text = System.Convert.ToString(min_trackBar.Value);
+
+            root_mintrackBar.Value = (int)(GetVolume() * progressBar1.Value / 100);
+            label12.Text = System.Convert.ToString(GetVolume() * progressBar1.Value / 100);
+
+            mintrack = (int)(GetVolume() * progressBar1.Value / 100);
+
+
         }
 
         // 音量の短時間連続上昇を防ぐ
@@ -152,7 +175,7 @@ namespace VolumeController
         {
             // Create a timer with a two second interval.
             // １秒
-            aTimer = new System.Timers.Timer(5000);
+            aTimer = new System.Timers.Timer(500);
             Debug.WriteLine("start");
             // Hook up the Elapsed event for the timer.
             enable_timer = true;
@@ -182,7 +205,8 @@ namespace VolumeController
             if (volume < 0)
             {
                 volume = 0;
-            }else if (volume > 100)
+            }
+            else if (volume > 100)
             {
                 volume = 100;
             }
@@ -208,6 +232,15 @@ namespace VolumeController
             return devices.ToArray();
         }
 
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
     /*
